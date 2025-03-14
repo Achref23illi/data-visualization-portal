@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.2/plotly.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Data Visualization and Exploration Portal</h1>
+            <p>Upload your CSV files and discover insights with powerful interactive visualizations</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div class="section-header">
+                    <h2>
+                        <span class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </span>
+                        Upload Your Dataset
+                    </h2>
+                </div>
+                <div class="section-content">
+                    <div class="upload-container">
+                        <div class="file-upload">
+                            <input type="file" id="csv-file" accept=".csv" />
+                            <label for="csv-file">
+                                <div class="upload-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <span>Choose a CSV file or drag it here</span>
+                            </label>
+                        </div>
+                        <div id="file-name" class="file-name"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="data-preview-section" class="data-preview-section hidden">
+                <div class="section-header">
+                    <h2>
+                        <span class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </span>
+                        Data Preview
+                    </h2>
+                </div>
+                <div class="section-content">
+                    <div class="data-table-container">
+                        <table id="data-preview" class="data-table"></table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="visualization-section" class="visualization-section hidden">
+                <div class="section-header">
+                    <h2>
+                        <span class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </span>
+                        Visualizations
+                    </h2>
+                </div>
+                
+                <div class="section-content">
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="chart-type">Chart Type:</label>
+                            <select id="chart-type">
+                                <option value="bar">Bar Chart</option>
+                                <option value="line">Line Chart</option>
+                                <option value="scatter">Scatter Plot</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="histogram">Histogram</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="x-axis">X-Axis:</label>
+                            <select id="x-axis"></select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="y-axis">Y-Axis:</label>
+                            <select id="y-axis"></select>
+                        </div>
+
+                        <div class="control-group" id="color-group">
+                            <label for="color-by">Color By:</label>
+                            <select id="color-by">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+
+                        <button id="generate-chart" class="generate-button">Generate Visualization</button>
+                    </div>
+                    
+                    <div id="chart-container" class="chart-container"></div>
+                </div>
+            </section>
+
+            <section id="analysis-section" class="analysis-section hidden">
+                <div class="section-header">
+                    <h2>
+                        <span class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                            </svg>
+                        </span>
+                        Data Analysis
+                    </h2>
+                </div>
+                <div class="section-content">
+                    <div class="summary-stats">
+                        <h3>Summary Statistics</h3>
+                        <div id="summary-container"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>Data Visualization and Exploration Portal &copy; 2025</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
