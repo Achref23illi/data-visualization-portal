@@ -50,7 +50,7 @@ data_visualization_portal/
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/data-visualization-portal.git
+   git clone https://github.com/Achref23illi/data-visualization-portal.git
    cd data-visualization-portal
    ```
 
@@ -100,7 +100,7 @@ data_visualization_portal/
 
 ## Customization
 
-- Modify `premium-styles.css` to change the appearance
+- Modify `styles.css` to change the appearance
 - Edit column detection logic in `script.js` for specific data formats
 - Adjust chart parameters in the visualization functions
 
